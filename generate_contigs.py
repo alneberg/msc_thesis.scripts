@@ -31,7 +31,7 @@ if __name__=="__main__":
     parser = ArgumentParser(description=DESC)
     parser.add_argument('sequence_dirs', help="Root path where all sequence files are located")
     parser.add_argument('output_file', help="File where all contigs end up.")
-    parser.add_argument('--fraction', default='0.8',
+    parser.add_argument('--fraction', default=0.8, type=float,
                         help="fraction to sample from each sequence")
     args = parser.parse_args()
     main(args)
