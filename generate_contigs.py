@@ -25,6 +25,8 @@ def main(args):
                 with open(os.path.join(seq_dir,f), 'r') as seq_file:
                     original_seqs = SeqIO.parse(seq_file, "fasta")
                     seqs += sample_all(original_seqs, fraction)
+    for seq in seqs:
+        seq.id += str(seq.start_position)
     SeqIO.write(seqs, args.output_file, "fasta")
 
 if __name__=="__main__":
