@@ -13,7 +13,8 @@ def main(args):
     seq_dirs = args.sequence_dirs
     dir_count = 0
     source = args.output_dir
-    for seq_dir in os.listdir(seq_dirs):
+    entries = (fn for fn in os.listdir(seq_dirs))
+    for seq_dir in sorted(entries):
         if dir_count > args.n:
             break
         seq_dir_path = os.path.join(seq_dirs,seq_dir)
