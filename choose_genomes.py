@@ -15,7 +15,7 @@ def main(args):
     source = args.output_dir
     entries = (fn for fn in os.listdir(seq_dirs))
     for seq_dir in sorted(entries):
-        if dir_count > args.n:
+        if dir_count >= args.n:
             break
         seq_dir_path = os.path.join(seq_dirs,seq_dir)
         source_path = os.path.join(args.output_dir, seq_dir)
