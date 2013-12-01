@@ -8,6 +8,8 @@ from Bio import SeqIO
 from logbook import Logger
 from argparse import ArgumentParser
 
+import pandas as p
+
 def main(args):
     """For each sequence in sequence_file, output zero to one column. """
     seqs = args.sequence_file
@@ -16,7 +18,8 @@ def main(args):
         for seq in SeqIO.parse(seq_file, "fasta"):
             covs[seq.id] = 0
     s = p.Series(covs)
-    s.to_csv(args.output_file)
+    df = p.DataFrame({0: s})
+    df.to_csv(args.output_file)
 
 if __name__=="__main__":
     parser = ArgumentParser(description=DESC)
