@@ -16,10 +16,10 @@ def main(args):
     covs = {}
     with open(seqs, 'r') as seq_file:
         for seq in SeqIO.parse(seq_file, "fasta"):
-            covs[seq.id] = 0
+            covs[seq.id] = 1
     s = p.Series(covs)
     df = p.DataFrame({0: s})
-    df.to_csv(args.output_file)
+    df.to_csv(args.output_file, sep="\t")
 
 if __name__=="__main__":
     parser = ArgumentParser(description=DESC)
