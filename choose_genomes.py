@@ -14,7 +14,7 @@ def main(args):
     seq_dirs = args.sequence_dirs
     dir_count = 0
     source = args.output_dir
-    entries = (fn for fn in os.listdir(seq_dirs))
+    entries = [fn for fn in os.listdir(seq_dirs)]
     if args.random:
         entries = random.sample(entries, args.n)
     for seq_dir in sorted(entries):
