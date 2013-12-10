@@ -6,6 +6,7 @@ import os
 
 from logbook import Logger
 from argparse import ArgumentParser
+import random
 
 def main(args):
     """For each dir in sequence_dirs, create a symlink to it from 
