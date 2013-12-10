@@ -14,13 +14,18 @@ def main(args):
     dir_count = 0
     source = args.output_dir
     entries = (fn for fn in os.listdir(seq_dirs))
+    if args.random:
+        entries = random.sample(entries, args.n)
     for seq_dir in sorted(entries):
         if dir_count >= args.n:
             break
-        seq_dir_path = os.path.join(seq_dirs,seq_dir)
-        source_path = os.path.join(args.output_dir, seq_dir)
-        os.symlink(seq_dir_path, source_path)
+        add_genome(seq_dirs, seq_dir, args)
         dir_count += 1
+
+def add_genome(seq_dirs, seq_dir, args):
+    seq_dir_path = os.path.join(seq_dirs,seq_dir)
+    source_path = os.path.join(args.output_dir, seq_dir)
+    os.symlink(seq_dir_path, source_path)
 
 
 if __name__=="__main__":
@@ -29,5 +34,7 @@ if __name__=="__main__":
     parser.add_argument('output_dir', help="File where all symlinks end up.")
     parser.add_argument('-n', default=60, type=int,
                         help="Number of files to link to")
+    parser.add_argument('--random', action="store_true",
+                        help="Choose the genomes randomly")
     args = parser.parse_args()
     main(args)
