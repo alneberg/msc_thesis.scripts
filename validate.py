@@ -15,14 +15,14 @@ def main(args):
     result into csv output_file. """
     result_dirs = args.result_dirs
     stats = {}
-    filtered_result = re.compile('clustering(gt_\w+)*.csv')
+    filtered_result = re.compile('clustering(_gt\w+)*.csv')
     for result_dir in os.listdir(result_dirs):
         result_path = os.path.join(result_dirs, result_dir)
         
         clustering_files = filter(filtered_result.match, os.listdir(result_path))
         for f in clustering_files:
             fp = os.path.join(result_path, f)
-            stats[result_dir] = run_validate(fp, 
+            stats[result_dir + "_" + f] = run_validate(fp, 
                                              args.validation_correct_file,
                                              args.validate_path)
 
