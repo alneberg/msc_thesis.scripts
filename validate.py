@@ -15,16 +15,28 @@ def main(args):
     result into csv output_file. """
     result_dirs = args.result_dirs
     stats = {}
-    filtered_result = re.compile('clustering(_gt\w+)*.csv')
+    filtered_result = re.compile('clustering(_gt(\w+))*.csv')
     for result_dir in os.listdir(result_dirs):
         result_path = os.path.join(result_dirs, result_dir)
         
         clustering_files = filter(filtered_result.match, os.listdir(result_path))
-        for f in clustering_files:
-            fp = os.path.join(result_path, f)
-            stats[result_dir + "_" + f] = run_validate(fp, 
-                                             args.validation_correct_file,
-                                             args.validate_path)
+        gt_file = filter(lambda x: 'gt' in x, clustering_files)[0]
+        threshold = filtered_result.match(gt_file).groups()[-1]
+        regular_clustering_file = filter(lambda x: 'gt' not in x, clustering_files)[0]
+
+        stats_gt = run_validate(os.path.join(result_path, gt_file),
+                                args.validation_correct_file,
+                                args.validate_path)
+        stats_regular = run_validate(os.path.join(result_path, 
+                                                  regular_clustering_file),
+                                     args.validation_correct_file,
+                                     args.validate_path)
+        columns_different = ["Rand", "Rec.", "M", "N", "S", "Prec.", "AdjRand", "NMI"]
+        for column in columns_different:
+            stats_regular[column + "_gt"] = stats_gt[column]
+        stats_regular["gt"] = threshold
+        
+        stats[result_dir] = stats_regular
 
     stats_df = p.DataFrame.from_dict(stats, orient="index")
     stats_df.to_csv(args.output_file)
