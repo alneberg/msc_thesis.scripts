@@ -1,0 +1,7 @@
+composition_file: /home/alneberg/glob/msc_thesis/data/sampled_contigs/ref_genomes_100_random_fraction_03/contigs.fa
+coverage_file: /home/alneberg/glob/msc_thesis/data/sampled_contigs/ref_genomes_100_random_fraction_03/coverage.tsv
+results_path_base: /home/alneberg/glob/msc_thesis/data/concoct_run/variable_parameters/
+kmer_lengths: [2,3,4,5,6,7,8,9,10]
+total_percentage_pca: [30,40,50,60,70,80,90,100]
+length_threshold: [500,1000,5000]
+covariance_type: [full,diag]
