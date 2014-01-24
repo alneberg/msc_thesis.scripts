@@ -7,3 +7,5 @@ kmer_lengths: [2,3]
 total_percentage_pca: [30]
 length_threshold: [1000]
 covariance_type: [diag]
+clusters: "5,20,5"
+max_n_processors: 1

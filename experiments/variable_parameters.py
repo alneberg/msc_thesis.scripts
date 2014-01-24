@@ -21,6 +21,8 @@ def main(run_name, settings, exec_mode):
     pcas = settings.get("total_percentage_pca", [80])
     thresholds = settings.get("length_threshold", [1000])
     cv_types = settings.get("covariance_type", ["full"])
+    clusters = settings.get("clusters", "2,100,2")
+    max_n_processors = settings.get("max_n_processors", 1)
     email = settings.get("email", None)
 
     log_path = settings.get("log_path", 
@@ -58,7 +60,9 @@ def main(run_name, settings, exec_mode):
                                           total_percentage_pca= pca,
                                           length_threshold = thr,
                                           covariance_type = cv,
-                                          basename = os.path.join(concoct_dir, job_name) + "/")
+                                          basename = os.path.join(concoct_dir, job_name) + "/",
+                                          max_n_processors = max_n_processors,
+                                          clusters = clusters)
                     con_ps.append(con_p)
 
                     cr = ConcoctR()
