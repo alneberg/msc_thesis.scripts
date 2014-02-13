@@ -20,6 +20,8 @@ def main(args):
         result_path = os.path.join(result_dirs, result_dir)
         
         clustering_files = filter(filtered_result.match, os.listdir(result_path))
+        if not clustering_files:
+            continue
         gt_file = filter(lambda x: 'gt' in x, clustering_files)[0]
         threshold = filtered_result.match(gt_file).groups()[-1]
         regular_clustering_file = filter(lambda x: 'gt' not in x, clustering_files)[0]
