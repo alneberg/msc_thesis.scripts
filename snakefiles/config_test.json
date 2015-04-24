@@ -1,0 +1,14 @@
+{ 
+    "python2": "/home/alneberg/miniconda/envs/concoct_thesis/bin/python",
+    "concoct": "/home/alneberg/miniconda/envs/concoct_thesis/bin/concoct",
+    "lengths": ["0", "500"],
+    "pcas": ["90"], 
+    "kmers": ["4", "5"],
+    "matrices": ["spherical"],
+    "datasets": ["test"],
+    "n_clusters": {
+        "test": 10,
+        "species": 101,
+        "strain": 20
+    }
+}
