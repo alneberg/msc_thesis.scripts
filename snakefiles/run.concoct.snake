@@ -1,20 +1,18 @@
 import glob
 import os
 
-configfile: "config.json"
+#configfile: "config.json"
+configfile: "config_test.json"
+
 PYTHON2 = config["python2"]
 
-LENGTHS = ["0", "500", "700", "1000", "3000", "5000"]
-PCA = ["10", "30", "50", "70", "90", "92", "94", "96", "98", "100"] 
-KMERS= ["1", "2", "3", "4", "5", "6", "7"]
-MATRICES=["diag", "spherical", "tied", "full"]
-#PCAS = ["90"]
-#KMERS = ["4"]
-#MATRICES = ["diag"]
-DATASETS=["species", "strain"]
-N_CLUSTERS = {"test": 10,
-              "species": 101,
-              "strain": 20}
+LENGTHS = config['lengths']
+PCAS = config['pcas']
+KMERS= config['kmers']
+MATRICES=config['matrices']
+DATASETS=config['datasets']
+
+N_CLUSTERS = config['n_clusters']
 
 rule concoct:
     input: "data/{dataset}/Contigs.fa"
