@@ -17,7 +17,10 @@ N_CLUSTERS = config['n_clusters']
 
 
 def all_cluster_runs(wildcards):
-    lengths = [l for l in LENGTHS if int(l)<int(wildcards.cutup)]
+    if wildcards.cutup == "original":
+        lengths = LENGTHS
+    else:
+        lengths = [l for l in LENGTHS if int(l)<int(wildcards.cutup)]
     return expand("results/{dataset}/{cutup}/{length}_{pca}_{kmer}_{matrix}/clustering_gt{length}.csv", length=lengths, pca=PCAS, kmer=KMERS, matrix=MATRICES, dataset=wildcards.dataset, cutup=wildcards.cutup)
  
 rule cutup:

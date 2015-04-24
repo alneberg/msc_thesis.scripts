@@ -8,7 +8,7 @@
     "kmers": ["1", "2", "3", "4", "5", "6", "7"],
     "matrices": ["diag", "spherical", "tied", "full"],
     "datasets": ["species", "strain"],
-    "cutup": ["1000", "5000", "10000"],
+    "cutup": ["1000", "5000", "10000", "original"],
     "n_clusters": {
         "test": 10,
         "species": 101,
