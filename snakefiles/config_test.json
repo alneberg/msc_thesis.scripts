@@ -3,11 +3,12 @@
     "python2": "/home/alneberg/miniconda/envs/concoct_thesis/bin/python",
     "concoct": "/home/alneberg/miniconda/envs/concoct_thesis/bin/concoct",
     "concoct_scripts": "/home/alneberg/repos/CONCOCT.msc_thesis/scripts",
-    "lengths": ["0", "500"],
+    "lengths": ["0", "5000"],
     "pcas": ["90"], 
     "kmers": ["4", "5"],
     "matrices": ["spherical"],
     "datasets": ["test"],
+    "cutup": ["1000", "5000", "10000"],
     "n_clusters": {
         "test": 10,
         "species": 101,
