@@ -11,12 +11,29 @@ PCAS = config['pcas']
 KMERS= config['kmers']
 MATRICES=config['matrices']
 DATASETS=config['datasets']
+CUTUP=config['cutup']
 
 N_CLUSTERS = config['n_clusters']
 
+
+def all_cluster_runs(wildcards):
+    lengths = [l for l in LENGTHS if int(l)<int(wildcards.cutup)]
+    return expand("results/{dataset}/{cutup}/{length}_{pca}_{kmer}_{matrix}/clustering_gt{length}.csv", length=lengths, pca=PCAS, kmer=KMERS, matrix=MATRICES, dataset=wildcards.dataset, cutup=wildcards.cutup)
+ 
+rule cutup:
+    input: "data/{dataset}/Contigs.fa",
+    output: "data/{dataset}/{cutup}/Contigs.fa"
+    params:
+        concoct_scripts = config["concoct_scripts"]
+    shell:
+        """config["load_env"]
+           python {params.concoct_scripts}/cut_up_fasta.py {input} \
+            --chunk_size {wildcards.cutup} --overlap_size 0 -m > {output}
+        """
+
 rule concoct:
-    input: "data/{dataset}/Contigs.fa"
-    output: "results/{dataset}/{length}_{pca}_{kmer}_{matrix}/clustering_gt{length}.csv"
+    input: "data/{dataset}/{cutup}/Contigs.fa"
+    output: "results/{dataset}/{cutup}/{length}_{pca}_{kmer}_{matrix}/clustering_gt{length}.csv"
     params:
         concoct = config["concoct"],
     run:
@@ -32,31 +49,21 @@ rule concoct:
             """)
 
 rule summarize_cluster_performance:
-    input: expand("results/{dataset}/{length}_{pca}_{kmer}_{matrix}/clustering_gt{length}.csv", \
-            length=LENGTHS, \
-            pca=PCAS, \
-            kmer=KMERS, \
-            matrix=MATRICES, \
-            dataset=DATASETS)
+    input: all_cluster_runs
     output:
-        "stats/{dataset}/clustering_perf.csv"
+        "stats/{dataset}/{cutup}_clustering_perf.csv"
     shell:
         """touch {output}"""
 
 rule summarize_cpu_memory:
-    input: expand("results/{dataset}/{length}_{pca}_{kmer}_{matrix}/clustering_gt{length}.csv", \
-            length=LENGTHS, \
-            pca=PCAS, \
-            kmer=KMERS, \
-            matrix=MATRICES, \
-            dataset=DATASETS)
+    input: all_cluster_runs
     output:
-        "stats/{dataset}cpu_memory.csv"
+        "stats/{dataset}/{cutup}_cpu_memory.csv"
     shell:
         """touch {output}"""
 
 rule all:
     input:
-        expand("stats/{dataset}/cpu_memory.csv", dataset=DATASETS),
-        expand("stats/{dataset}/clustering_perf.csv", dataset=DATASETS)
+        expand("stats/{dataset}/{cutup}_cpu_memory.csv", dataset=DATASETS, cutup=CUTUP),
+        expand("stats/{dataset}/{cutup}_clustering_perf.csv", dataset=DATASETS, cutup=CUTUP)
 
