@@ -1,6 +1,8 @@
 { 
+    "load_env": "source activate concoct_thesis",
     "python2": "/home/alneberg/miniconda/envs/concoct_thesis/bin/python",
     "concoct": "/home/alneberg/miniconda/envs/concoct_thesis/bin/concoct",
+    "concoct_scripts": "/home/alneberg/repos/CONCOCT.msc_thesis/scripts",
     "lengths": ["0", "500", "700", "1000", "3000", "5000"],
     "pcas": ["10", "30", "50", "70", "90", "92", "94", "96", "98", "100"], 
     "kmers": ["1", "2", "3", "4", "5", "6", "7"],
