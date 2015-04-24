@@ -4,7 +4,7 @@ Submit this clustering script for sbatch to snakemake with:
 
     snakemake -j 99 --debug --immediate-submit --cluster 'snakemake_scheduler.py {dependencies}'
 
-@author: indob
+@author: inodb
 """
 import argparse
 import sys
