@@ -1,0 +1,64 @@
+import glob
+import os
+
+configfile: "config.json"
+PYTHON2 = config["python2"]
+
+LENGTHS = ["0", "500", "700", "1000", "3000", "5000"]
+PCA = ["10", "30", "50", "70", "90", "92", "94", "96", "98", "100"] 
+KMERS= ["1", "2", "3", "4", "5", "6", "7"]
+MATRICES=["diag", "spherical", "tied", "full"]
+#PCAS = ["90"]
+#KMERS = ["4"]
+#MATRICES = ["diag"]
+DATASETS=["species", "strain"]
+N_CLUSTERS = {"test": 10,
+              "species": 101,
+              "strain": 20}
+
+rule concoct:
+    input: "data/{dataset}/Contigs.fa"
+    output: "results/{dataset}/{length}_{pca}_{kmer}_{matrix}/clustering_gt{length}.csv"
+    params:
+        concoct = config["concoct"],
+    run:
+        n_clusters = N_CLUSTERS[wildcards.dataset]
+        outdir = "/".join(output[0].split('/')[0:-1]) + "/"
+        shell("""{params.concoct} --composition_file {input} \
+            -b {outdir} \
+            --total_percentage_pca {wildcards.pca} \
+            --clusters {n_clusters} \
+            -k {wildcards.kmer} \
+            --matrix_shape {wildcards.matrix} \
+            -l {wildcards.length}
+            """)
+
+rule summarize_cluster_performance:
+    input: expand("results/{dataset}/{length}_{pca}_{kmer}_{matrix}/clustering_gt{length}.csv", \
+            length=LENGTHS, \
+            pca=PCAS, \
+            kmer=KMERS, \
+            matrix=MATRICES, \
+            dataset=DATASETS)
+    output:
+        "stats/{dataset}/clustering_perf.csv"
+    shell:
+        """touch {output}"""
+
+rule summarize_cpu_memory:
+    input: expand("results/{dataset}/{length}_{pca}_{kmer}_{matrix}/clustering_gt{length}.csv", \
+            length=LENGTHS, \
+            pca=PCAS, \
+            kmer=KMERS, \
+            matrix=MATRICES, \
+            dataset=DATASETS)
+    output:
+        "stats/{dataset}cpu_memory.csv"
+    shell:
+        """touch {output}"""
+
+rule all:
+    input:
+        expand("stats/{dataset}/cpu_memory.csv", dataset=DATASETS),
+        expand("stats/{dataset}/clustering_perf.csv", dataset=DATASETS)
+
