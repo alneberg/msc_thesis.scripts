@@ -10,10 +10,14 @@ import argparse
 import sys
 
 def main(args):
-    pca_df =  pd.read_table(args.pca_data, index_col=0)
-    pca_df_nonnull = pca_df[pca_df['taxon'].notnull()]
-    dm = DistanceMatrix(squareform(pdist(pca_df_nonnull[[0,1,2]], metric='euclidean')))
-    a = anosim(dm, pca_df_nonnull['taxon'], permutations=0)
+    data_df =  pd.read_table(args.data, index_col=0)
+    data_df_nonnull = data_df[data_df['taxon'].notnull()]
+
+    val_cols = data_df_nonnull.columns
+    val_cols.remove('taxon')
+
+    dm = DistanceMatrix(squareform(pdist(data_df_nonnull[val_cols], metric='euclidean')))
+    a = anosim(dm, data_df_nonnull['taxon'], permutations=0)
 
     a_df = pd.DataFrame(a).T
     a_df.index = [args.data_name]
@@ -22,7 +26,7 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(__doc__)
-    parser.add_argument("pca_data")
+    parser.add_argument("data")
     parser.add_argument("data_name")
     args = parser.parse_args()
 
